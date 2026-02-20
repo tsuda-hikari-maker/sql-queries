@@ -1,0 +1,4 @@
+SELECT date_format(fh.created,'%Y%m') as A,count(*) as cnt,sh.kintone_code,sh.name, type,count(type) FROM favorite_shops_histories fh
+left join shops sh on fh.shop_id = sh.id
+WHERE fh.created BETWEEN '2026-01-01 00:00:00.000000' AND '2026-01-31 23:59:59.000000'
+group by date_format(fh.created,'%Y%m'),fh.shop_id ,type;
