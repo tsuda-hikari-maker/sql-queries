@@ -1,0 +1,21 @@
+SELECT
+  shop_id,
+  max(shop_name) AS shop_name,
+
+  -- login 回数（item_typeに関係なく event='login' を数える）
+  SUM(CASE WHEN event = 'login' THEN 1 ELSE 0 END) AS login_cnt,
+
+  -- item_type別：更新回数（event='update'のみ数える）
+  SUM(CASE WHEN event = 'update' AND item_type = 'ShopMachine' THEN 1 ELSE 0 END) AS shopmachine_update_cnt,
+  SUM(CASE WHEN event = 'update' AND item_type = 'ShopPage'    THEN 1 ELSE 0 END) AS shoppage_update_cnt,
+  SUM(CASE WHEN event = 'update' AND item_type = 'Shop'        THEN 1 ELSE 0 END) AS shop_update_cnt
+
+FROM "dmmp_prd-app-audit-logs-table"
+WHERE CAST(event_at AS timestamp) >= TIMESTAMP '2026-01-01 00:00:00'
+  AND CAST(event_at AS timestamp) <  TIMESTAMP '2026-02-01 00:00:00'
+  AND (
+    event = 'login'
+    OR (event = 'update' AND item_type IN ('ShopMachine','ShopPage','Shop'))
+  )
+GROUP BY shop_id
+ORDER BY shop_id;
