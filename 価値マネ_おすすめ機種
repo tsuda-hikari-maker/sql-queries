@@ -1,1 +1,20 @@
-
+SELECT
+  ss.shop_id AS `店舗ID`,
+  sh.kintone_code,
+  MAX(sm.updated) AS `最大更新日時`
+FROM shop_machines sm
+LEFT JOIN shop_machine_settings ss
+  ON sm.shop_machine_setting_id = ss.id
+LEFT JOIN shops sh
+  ON ss.shop_id = sh.id
+WHERE ss.shop_id IS NOT NULL
+  AND sh.deleted = 0
+  AND sh.contracted = 1
+  AND sh.published = 1
+  AND ss.price = 1
+  AND sm.updated < '2026-01-14 23:55:00'
+GROUP BY
+  ss.shop_id,
+  sh.kintone_code
+ORDER BY
+  `店舗ID` ASC;
