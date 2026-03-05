@@ -19,3 +19,21 @@ WHERE CAST(event_at AS timestamp) >= TIMESTAMP '2026-01-01 00:00:00'
   )
 GROUP BY shop_id
 ORDER BY shop_id;
+
+
+ユニークログイン回数
+SELECT
+  date_format(date_trunc('month', event_at), '%Y-%m') AS ym,
+  shop_id,
+  shop_name,
+  COUNT(*) AS total_login_cnt,
+  COUNT(DISTINCT CAST(event_at AS date)) AS unique_login_days
+FROM "dmmp_prd-app-audit-logs-table"
+WHERE event = 'login'
+  -- 期間は必要に応じて
+  AND event_at >= TIMESTAMP '2026-02-01 00:00:00'
+  AND event_at <  TIMESTAMP '2026-03-01 00:00:00'
+GROUP BY 1, 2, 3
+ORDER BY 1, 2;
+
+
