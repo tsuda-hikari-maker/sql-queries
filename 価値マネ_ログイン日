@@ -1,1 +1,14 @@
+SELECT
+  date_format(date_trunc('month', event_at), '%Y-%m') AS ym,
+  shop_id,
+  shop_name,
+  MAX(CAST(event_at AS date)) AS last_login_date_in_month,
+  MAX(event_at) AS last_login_at_in_month
+FROM "dmmp_prd-app-audit-logs-table"
+WHERE event = 'login'
+  -- 期間は必要に応じて
+  AND event_at >= TIMESTAMP '2026-01-01 00:00:00'
+  AND event_at <  TIMESTAMP '2026-04-01 00:00:00'
+GROUP BY 1, 2, 3
+ORDER BY ym, shop_id;
 
