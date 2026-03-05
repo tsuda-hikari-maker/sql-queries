@@ -1,1 +1,11 @@
-
+SELECT
+  sh.kintone_code,
+  ns.shop_id,
+  MAX(ns.publish_datetime) AS publish_datetime,
+  ns.created,
+  ns.updated
+FROM shop_floor_maps ns
+left join shops sh on ns.shop_id = sh.id
+WHERE  ns.shop_id not in (0,11755) and ns.publish_datetime <= '2026-01-17 00:00:00'
+GROUP BY ns.shop_id
+ORDER BY `ns`.`shop_id` ASC;
