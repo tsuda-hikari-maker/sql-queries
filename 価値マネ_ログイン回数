@@ -1,3 +1,4 @@
+ログイン回数と更新回数（設置機種とか）
 SELECT
   shop_id,
   max(shop_name) AS shop_name,
